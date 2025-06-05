@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unique PRE Horses - Diseña tu caballo ideal</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background: #f5f3f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 600px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #4a3f35;
+    }
+    .question {
+      margin: 1.5rem 0;
+    }
+    .question label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+    .question select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .submit-btn {
+      margin-top: 2rem;
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: #8c5e3c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .result img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diseña tu caballo ideal</h1>
+    <div class="question">
+      <label for="raza">¿Qué raza prefieres?</label>
+      <select id="raza">
+        <option value="PRE">PRE (Pura Raza Española)</option>
+        <option value="PSL">PSL (Puro Sangre Lusitano)</option>
+        <option value="mezcla">Mezcla PRE + PSL</option>
+      </select>
+    </div>
+
+    <div class="question">
+      <label for="color">¿Qué color te gustaría?</label>
+      <select id="color">
+        <option value="blanco">Blanco</option>
+        <option value="tordo">Tordo</option>
+        <option value="negro">Negro</option>
+        <option value="castaño">Castaño</option>
+        <option value="alazan">Alazán</option>
+      </select>
+    </div>
+
+    <button class="submit-btn" onclick="generarCaballo()">Generar mi caballo ideal</button>
+
+    <div class="result" id="resultado"></div>
+  </div>
+
+  <script>
+    function generarCaballo() {
+      const raza = document.getElementById("raza").value;
+      const color = document.getElementById("color").value;
+
+      const descripcion = `Un majestuoso caballo ${raza}, de color ${color}, de porte elegante y noble.`;
+      document.getElementById("resultado").innerHTML = `
+        <h2>Tu caballo ideal</h2>
+        <p>${descripcion}</p>
+        <p><em>(Imagen personalizada se generará de forma privada en la versión final)</em></p>
+      `;
+    }
+  </script>
+</body>
+</html>
