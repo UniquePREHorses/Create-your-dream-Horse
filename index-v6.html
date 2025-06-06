@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diseña tu caballo ideal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .option {
+      border: 4px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border 0.3s;
+    }
+    .option img {
+      width: 200px;
+      height: auto;
+      border-radius: 10px;
+    }
+    .option.selected {
+      border: 4px solid black;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #222;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Diseña tu caballo ideal</h1>
+
+  <div id="step1" class="step active">
+    <h2>¿Qué raza prefieres?</h2>
+    <div class="options">
+      <div class="option" data-value="PRE">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pura_Raza_Espa%C3%B1ola_-_PRE.jpg/640px-Pura_Raza_Espa%C3%B1ola_-_PRE.jpg" alt="PRE" />
+        <p>PRE</p>
+      </div>
+      <div class="option" data-value="PSL">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Lusitano_horse.jpg" alt="PSL" />
+        <p>PSL</p>
+      </div>
+      <div class="option" data-value="Mezcla">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Horse_in_mountain.jpg" alt="Mezcla" />
+        <p>Mezcla</p>
+      </div>
+    </div>
+    <button onclick="nextStep()">Siguiente</button>
+  </div>
+
+  <div id="step2" class="step">
+    <h2>¿Qué color te gusta más?</h2>
+    <div class="options">
+      <div class="option" data-value="Blanco">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/White_horse_galloping.jpg" alt="Blanco" />
+        <p>Blanco</p>
+      </div>
+      <div class="option" data-value="Negro">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Black_horse_running.jpg" alt="Negro" />
+        <p>Negro</p>
+      </div>
+      <div class="option" data-value="Marrón">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Horse_in_field.jpg" alt="Marrón" />
+        <p>Marrón</p>
+      </div>
+      <div class="option" data-value="Alazán">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Chestnut_horse_in_snow.jpg" alt="Alazán" />
+        <p>Alazán</p>
+      </div>
+    </div>
+    <button onclick="nextStep()">Siguiente</button>
+  </div>
+
+  <div id="result" class="step">
+    <h2>¡Tu caballo ideal!</h2>
+    <p id="summary"></p>
+    <img id="resultImage" src="" alt="Caballo generado" style="max-width: 100%; border-radius: 10px;" />
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    let currentStep = 0;
+    let answers = {};
+
+    document.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', () => {
+        const group = option.parentElement;
+        group.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        const stepId = group.closest('.step').id;
+        answers[stepId] = option.getAttribute('data-value');
+      });
+    });
+
+    function nextStep() {
+      if (!answers[`step${currentStep + 1}`]) {
+        alert('Por favor selecciona una opción antes de continuar.');
+        return;
+      }
+
+      steps[currentStep].classList.remove('active');
+      currentStep++;
+
+      if (currentStep < steps.length - 1) {
+        steps[currentStep].classList.add('active');
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('result').classList.add('active');
+      const raza = answers['step1'];
+      const color = answers['step2'];
+      document.getElementById('summary').innerText = `Tu caballo ideal es un ${raza} de color ${color}.`;
+
+      let imgSrc = '';
+      if (color === 'Blanco') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/White_horse_galloping.jpg';
+      if (color === 'Negro') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Black_horse_running.jpg';
+      if (color === 'Marrón') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Horse_in_field.jpg';
+      if (color === 'Alazán') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/8/85/Chestnut_horse_in_snow.jpg';
+
+      document.getElementById('resultImage').src = imgSrc;
+    }
+  </script>
+</body>
+</html>
