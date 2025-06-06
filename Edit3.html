@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diseña tu caballo ideal - Unique PRE Horses</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000000;
+      color: #d4af37; /* Dorado */
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1, h2 {
+      text-shadow: 0 0 8px #d4af37;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-top: 20px;
+    }
+    .option {
+      border: 3px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color 0.4s, transform 0.3s;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+      background-color: #1a1a1a;
+      padding: 8px;
+      max-width: 220px;
+    }
+    .option:hover {
+      border-color: #d4af37;
+      transform: scale(1.05);
+    }
+    .option.selected {
+      border-color: #d4af37;
+      box-shadow: 0 0 20px #d4af37;
+      transform: scale(1.1);
+    }
+    .option img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin: 0 auto;
+    }
+    button {
+      margin-top: 40px;
+      padding: 12px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: #000000;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px #d4af37;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #b8860b, #d4af37);
+    }
+    #resultImage {
+      max-width: 90%;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #d4af37;
+      margin-top: 25px;
+    }
+    #summary {
+      font-size: 22px;
+      font-weight: 600;
+      margin-top: 15px;
+      text-shadow: 0 0 6px #d4af37;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Diseña tu caballo ideal</h1>
+
+  <div id="step1" class="step active">
+    <h2>¿Qué raza prefieres?</h2>
+    <div class="options">
+      <div class="option" data-value="PRE">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pura_Raza_Espa%C3%B1ola_-_PRE.jpg/640px-Pura_Raza_Espa%C3%B1ola_-_PRE.jpg" alt="PRE" />
+        <p>PRE</p>
+      </div>
+      <div class="option" data-value="PSL">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Lusitano_horse.jpg" alt="PSL" />
+        <p>PSL</p>
+      </div>
+      <div class="option" data-value="Mezcla">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Horse_in_mountain.jpg" alt="Mezcla" />
+        <p>Mezcla</p>
+      </div>
+    </div>
+    <button onclick="nextStep()">Siguiente</button>
+  </div>
+
+  <div id="step2" class="step">
+    <h2>¿Qué color te gusta más?</h2>
+    <div class="options">
+      <div class="option" data-value="Blanco">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/White_horse_galloping.jpg" alt="Blanco" />
+        <p>Blanco</p>
+      </div>
+      <div class="option" data-value="Negro">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Black_horse_running.jpg" alt="Negro" />
+        <p>Negro</p>
+      </div>
+      <div class="option" data-value="Marrón">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Horse_in_field.jpg" alt="Marrón" />
+        <p>Marrón</p>
+      </div>
+      <div class="option" data-value="Alazán">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Chestnut_horse_in_snow.jpg" alt="Alazán" />
+        <p>Alazán</p>
+      </div>
+    </div>
+    <button onclick="nextStep()">Siguiente</button>
+  </div>
+
+  <div id="result" class="step">
+    <h2>¡Tu caballo ideal!</h2>
+    <p id="summary"></p>
+    <img id="resultImage" src="" alt="Caballo generado" />
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    let currentStep = 0;
+    let answers = {};
+
+    document.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', () => {
+        // Deseleccionar otras opciones del mismo grupo
+        const group = option.parentElement;
+        group.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        // Seleccionar esta opción
+        option.classList.add('selected');
+        // Guardar respuesta
+        const stepId = group.closest('.step').id;
+        answers[stepId] = option.getAttribute('data-value');
+      });
+    });
+
+    function nextStep() {
+      // Verificar que se haya seleccionado una opción antes de avanzar
+      if (!answers[`step${currentStep + 1}`]) {
+        alert('Por favor selecciona una opción antes de continuar.');
+        return;
+      }
+      // Ocultar paso actual
+      steps[currentStep].classList.remove('active');
+      currentStep++;
+      // Mostrar siguiente paso o resultado
+      if (currentStep < steps.length - 1) {
+        steps[currentStep].classList.add('active');
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('result').classList.add('active');
+      const raza = answers['step1'];
+      const color = answers['step2'];
+      document.getElementById('summary').innerText = `Tu caballo ideal es un ${raza} de color ${color}.`;
+
+      // Asignar imagen según color
+      let imgSrc = '';
+      if (color === 'Blanco') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/White_horse_galloping.jpg';
+      else if (color === 'Negro') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Black_horse_running.jpg';
+      else if (color === 'Marrón') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Horse_in_field.jpg';
+      else if (color === 'Alazán') imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/8/85/Chestnut_horse_in_snow.jpg';
+
+      document.getElementById('resultImage').src = imgSrc;
+      document.getElementById('resultImage').alt = `Caballo ${raza} de color ${color}`;
+    }
+  </script>
+
+</body>
+</html>
