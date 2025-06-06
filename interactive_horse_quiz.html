@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diseña tu Caballo Ideal</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .option {
+      border: 2px solid transparent;
+      cursor: pointer;
+      padding: 10px;
+      transition: 0.3s;
+    }
+    .option img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .option.selected {
+      border: 2px solid #333;
+      background-color: #e0e0e0;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .final img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="quiz">
+      <!-- Paso 1: Selección de raza -->
+      <div class="step" id="step1">
+        <h2 class="question">¿Qué raza prefieres?</h2>
+        <div class="options">
+          <div class="option" data-value="PRE">
+            <img src="https://i.imgur.com/yLrKnU5.jpg" alt="PRE" />
+            <p>PRE</p>
+          </div>
+          <div class="option" data-value="PSL">
+            <img src="https://i.imgur.com/YWJYc3Z.jpg" alt="PSL" />
+            <p>PSL</p>
+          </div>
+          <div class="option" data-value="Mezcla">
+            <img src="https://i.imgur.com/91Qf3cZ.jpg" alt="Mezcla" />
+            <p>Mezcla</p>
+          </div>
+        </div>
+        <button onclick="nextStep(1)">Siguiente</button>
+      </div>
+
+      <!-- Paso 2: Selección de color -->
+      <div class="step" id="step2" style="display:none">
+        <h2 class="question">¿Qué color te gusta más?</h2>
+        <div class="options">
+          <div class="option" data-value="Blanco">
+            <img src="https://i.imgur.com/HhvGABV.jpg" alt="Blanco" />
+            <p>Blanco</p>
+          </div>
+          <div class="option" data-value="Negro">
+            <img src="https://i.imgur.com/UZBp1EG.jpg" alt="Negro" />
+            <p>Negro</p>
+          </div>
+          <div class="option" data-value="Marrón">
+            <img src="https://i.imgur.com/rgEzmi1.jpg" alt="Marrón" />
+            <p>Marrón</p>
+          </div>
+          <div class="option" data-value="Alazán">
+            <img src="https://i.imgur.com/RBQSCVK.jpg" alt="Alazán" />
+            <p>Alazán</p>
+          </div>
+        </div>
+        <button onclick="nextStep(2)">Ver Resultado</button>
+      </div>
+
+      <!-- Resultado final -->
+      <div class="step" id="result" style="display:none">
+        <h2>¡Así es tu caballo ideal!</h2>
+        <p id="summary"></p>
+        <div class="final">
+          <img id="finalImage" src="" alt="Caballo generado" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const answers = {};
+
+    document.querySelectorAll('.option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const parent = opt.parentElement;
+        parent.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+
+    function nextStep(step) {
+      const currentStep = document.getElementById(`step${step}`);
+      const selected = currentStep.querySelector('.option.selected');
+      if (!selected) {
+        alert('Por favor, selecciona una opción.');
+        return;
+      }
+
+      const value = selected.dataset.value;
+      if (step === 1) answers.raza = value;
+      if (step === 2) answers.color = value;
+
+      currentStep.style.display = 'none';
+      const next = document.getElementById(`step${step + 1}`);
+      if (next) {
+        next.style.display = 'block';
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('result').style.display = 'block';
+      const resumen = `Has elegido un caballo ${answers.raza} de color ${answers.color}.`;
+      document.getElementById('summary').textContent = resumen;
+
+      // Simulación de imagen según combinación
+      let imgURL = 'https://i.imgur.com/yLrKnU5.jpg'; // por defecto
+      if (answers.raza === 'PRE' && answers.color === 'Blanco') imgURL = 'https://i.imgur.com/HhvGABV.jpg';
+      if (answers.raza === 'PSL' && answers.color === 'Negro') imgURL = 'https://i.imgur.com/UZBp1EG.jpg';
+      if (answers.color === 'Marrón') imgURL = 'https://i.imgur.com/rgEzmi1.jpg';
+      if (answers.color === 'Alazán') imgURL = 'https://i.imgur.com/RBQSCVK.jpg';
+
+      document.getElementById('finalImage').src = imgURL;
+    }
+  </script>
+</body>
+</html>
